@@ -1,0 +1,20 @@
+Os dois passos seguintes foram realizados para criar o package:
+
+No ficheiro configuration.app foi necessário registar a class:
+//Indaleto Configuration
+		indaleto\configuration\ConfigurationProvider::class,
+
+No ficheiro composer.json do projeto foi necessário indicar o caminho para ler o ficheiro:
+"autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "indaleto\\configuration\\": "packages/indaleto/configuration/src"
+
+        }
+    },
+
+
+ Para incluir este package num projeto:
+ composer require indaleto/configuration
+ seguido de
+ composer update
