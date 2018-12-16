@@ -13,8 +13,38 @@ No ficheiro composer.json do projeto foi necessário indicar o caminho para ler 
         }
     },
 
-
  Para incluir este package num projeto:
  composer require indaleto/configuration
  seguido de
  composer update
+
+IMPLEMENTAÇÃO: MÉTODOS DISPONÍVEIS:
+
+Utilizadores
+getUser($id)
+remUser($id)
+editUser($id)
+addUser() -->POST
+resetPassword($id)
+
+Configurações 
+getConfig($key,$default)
+removeConfig($key)
+setConfig($key,$value)
+
+Utilização:
+Em Routes/web.php definir:
+
+Route::get('/admin/users/{id}', 'XPTOController@viewUser'); -->Obtém e Apresenta user
+Route::get('/admin/settings','settingsController@viewSettings'); -->Obtém e Apresenta Configurações
+
+As operações para adicionar, alterar e remover um utilizador devem ter como links:
+
+/admin/users/add
+/admin/users/$ID/edit (POST)
+/admin/users/$ID/del
+/admin/users/$ID/resetPassword
+
+As operações para alterar as configurações e para remover o logo devem ter como links
+/admin/settings/edit (POST)
+/admin/settings/remLogo
