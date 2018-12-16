@@ -33,7 +33,7 @@ class Configuration{
         return configurationTable::where('configuration','settings')->where('key',$key)->first();
     }
 
-    private function valueOrNull($config,$default){
+    private function valueOrDefault($config,$default){
         if ($config==null){
             return $default;
         }else{
@@ -43,7 +43,7 @@ class Configuration{
 
     public function getConfig($key,$default){
         $info=$this->GetConfiguration($key);
-        return $this->valueOrNull($info,$default);
+        return $this->valueOrDefault($info,$default);
     }
 
     public function removeConfig($key){
