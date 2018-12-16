@@ -58,5 +58,5 @@ class configurationController extends Controller
 		}
 		return redirect('/admin/settings');
 	}
-	
+
 }
