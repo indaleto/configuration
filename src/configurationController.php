@@ -50,6 +50,8 @@ use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\Auth;
+
 class configurationTable extends Model
 {
     protected $fillable = [
@@ -124,8 +126,35 @@ class Configuration{
 
     /*****************************************************************
 
-    Implementação dos métodos relativos aos utilizadores
+    Implementação dos métodos relativos aos Perfil do Utilizador que fez login
 
+    *******************************************************************/
+
+    public function getProfile(){
+        return \App\User::find(Auth::user()->id);
+    }
+    public function getProfileAvatar(){
+        if (file_exists(public_path().'/img/avatar/'.Auth::user()->id.'.jpg')){
+            return '/img/avatar/'.Auth::user()->id.'.jpg';
+        }
+        else if (file_exists(public_path().'/img/avatar/'.Auth::user()->id.'.png')){
+            return '/img/avatar/'.Auth::user()->id.'.png';
+        }
+        else{
+            return '/img/avatar/noProfile.png';
+        }
+    }
+    public function editProfile($campos){
+        $u=\App\User::find(Auth::user()->id);
+        foreach ($campos as $key => $value) {
+            $u[$key]=$value;
+        }
+        $u->save();
+    }
+
+    /*****************************************************************
+
+    Implementação dos métodos relativos aos utilizadores
 
     *******************************************************************/
 
@@ -210,10 +239,53 @@ class Configuration{
 }
 class configurationController extends Controller
 {
-	private $configuration;
+	public $configuration;
 	public function __construct(){
 		$this->configuration = new  Configuration;
 	}
+
+    public function editProfile(Request $request){
+        $this->configuration->editProfile([
+            'name' =>$request->input('name'),
+            'email' => $request->input('email')]);
+        if ($request->hasFile('imagem') && $request->file('imagem')->isValid()){
+            $filename = $request->file('imagem');
+            $ext = $filename->getClientOriginalExtension();
+            $path = public_path() . '/img/avatar';
+            if (file_exists(public_path().'/img/avatar/'.Auth::user()->id.'.jpg')){
+                unlink(public_path().'/img/avatar/'.Auth::user()->id.'.jpg');
+            }
+            if (file_exists(public_path().'/img/avatar/'.Auth::user()->id.'.png')){
+                unlink(public_path().'/img/avatar/'.Auth::user()->id.'.png');
+            }
+            $filename->move($path, Auth::user()->id.'.'.$ext);
+        }
+
+        if ($request->input('password')==$request->input('password2')){
+            $this->configuration->editProfile(['password' => Hash::make($request->input('password'))]);
+            return redirect("info?msg=A password foi alterada. Aguarde por favor.&url=profile");
+        }
+        else if($request->input('password2')!="" && $request->input('password')!=$request->input('password2')){
+            return redirect("error?msg=As password não são iguais. Aguarde por favor.&url=profile");
+        }
+        else if($request->input('password2')=="" && $request->input('password')!=$request->input('password2')){
+            return redirect("info?msg=As alterações foram guardadas com sucesso. Aguarde por favor.&url=profile");
+        }
+        else{
+            return redirect("profile");
+        }
+    }
+
+    //Remove o avatar do perfil
+    public function remProfileLogo(){
+        if (file_exists(public_path().'/img/avatar/'.Auth::user()->id.'.jpg')){
+            unlink(public_path().'/img/avatar/'.Auth::user()->id.'.jpg');
+        }
+        if (file_exists(public_path().'/img/avatar/'.Auth::user()->id.'.png')){
+            unlink(public_path().'/img/avatar/'.Auth::user()->id.'.png');
+        }
+        return redirect('profile');
+    }
 
     public function addUser(Request $request){
     	$i=$this->configuration->addUser([
@@ -252,8 +324,8 @@ class configurationController extends Controller
 		if ($request->hasFile('imagem') && $request->file('imagem')->isValid()){
 			$filename = $request->file('imagem');
 			$ext = $filename->getClientOriginalExtension();
-			$path = public_path() . '/img/uploads';
-			$this->configuration->setConfig('imagem','/img/uploads/backofficeImg.'.$ext);
+			$path = public_path() . '/img/brand';
+			$this->configuration->setConfig('imagem','/img/brand/backofficeImg.'.$ext);
 			$filename->move($path, 'backofficeImg.'.$ext);
 		}
 		return redirect('/admin/settings');
