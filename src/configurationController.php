@@ -263,13 +263,13 @@ class configurationController extends Controller
 
         if ($request->input('password')==$request->input('password2')){
             $this->configuration->editProfile(['password' => Hash::make($request->input('password'))]);
-            return redirect("info?msg=A password foi alterada. Aguarde por favor.&url=profile");
+            return redirect("/profile?msgInfo=Os dados foram alterados.");
         }
         else if($request->input('password2')!="" && $request->input('password')!=$request->input('password2')){
-            return redirect("error?msg=As password não são iguais. Aguarde por favor.&url=profile");
+            return redirect("/profile?msgError=As password não são iguais.");
         }
         else if($request->input('password2')=="" && $request->input('password')!=$request->input('password2')){
-            return redirect("info?msg=As alterações foram guardadas com sucesso. Aguarde por favor.&url=profile");
+            return redirect("/profile?msgInfo=Os dados foram alterados.");
         }
         else{
             return redirect("profile");
@@ -284,7 +284,7 @@ class configurationController extends Controller
         if (file_exists(public_path().'/img/avatar/'.Auth::user()->id.'.png')){
             unlink(public_path().'/img/avatar/'.Auth::user()->id.'.png');
         }
-        return redirect('profile');
+        return redirect('profile?msgInfo=O avatar foi removido.');
     }
 
     public function addUser(Request $request){
@@ -292,12 +292,12 @@ class configurationController extends Controller
 			'name' =>$request->input('name'),
 			'email' => $request->input('email'),
 			'type' => $request->input('type')]);
-		return redirect("admin/users/$i");
+		return redirect("admin/users/$i?msgInfo=O utilizador foi criado.");
     }
 
     public function delUser($id) {
 		$this->configuration->remUser($id);
-		return redirect('/admin/users');
+		return redirect('/admin/users?msgInfo=O utilizador foi eliminado.');
 	}
 
 	public function editUser(Request $request, $id) {
@@ -305,17 +305,17 @@ class configurationController extends Controller
 			'name' =>$request->input('name'),
 			'email' => $request->input('email'),
 			'type' => $request->input('type')]);
-		return redirect("admin/users/$id");
+		return redirect("admin/users/$id?msgInfo=O utilizador foi alterado.");
 	}
 
 	public function sendResetPasswordLink($id) {
 		$this->configuration->resetPassword($id);
-		return redirect("admin/users/$id");		
+		return redirect("admin/users/$id?msgInfo=O link para alteração da password foi enviado.");		
 	}
 
 	public function remLogo(){
 		$this->configuration->removeConfig('imagem');
-		return redirect('/admin/settings');
+		return redirect('/admin/settings?msgInfo=O logotipo da empresa foi removido.');
 	}
 
 	public function editSettings(Request $request){
@@ -328,7 +328,7 @@ class configurationController extends Controller
 			$this->configuration->setConfig('imagem','/img/brand/backofficeImg.'.$ext);
 			$filename->move($path, 'backofficeImg.'.$ext);
 		}
-		return redirect('/admin/settings');
+		return redirect('/admin/settings?msgInfo=Os dados da empresa foram alterados.');
 	}
 
 }
