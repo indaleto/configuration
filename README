@@ -1,8 +1,7 @@
-Os dois passos seguintes foram realizados para criar o package:
+Os passos seguintes foram realizados para criar o package:
 
-No ficheiro configuration.app foi necessário registar a class:
-//Indaleto Configuration
-		indaleto\configuration\ConfigurationProvider::class,
+Na pasta indaleto/configuration/src executa-se:
+composer init para criar o ficheiro composer.json
 
 No ficheiro composer.json do projeto foi necessário indicar o caminho para ler o ficheiro:
 "autoload": {
@@ -12,6 +11,66 @@ No ficheiro composer.json do projeto foi necessário indicar o caminho para ler 
 
         }
     },
+
+Após essa alteração executa-se (No servidor):
+composer dump-autoload 
+
+Criar o Controller (se necessário)
+na pasta packages/indaleto/configuration/src/ cria-se o controller:
+use App\Http\Controllers\Controller;
+class configurationController extends Controller
+{
+    private $configuration;
+    public function __construct(){
+        $this->configuration = new  Configuration;
+    }
+    public function processaConfig(){
+        //COISAS A FAZER
+    }
+}
+
+
+A seguir cria-se o service provider que vai gerir as rotas e os controllers se existirem:
+php artisan make:provider CalculatorServiceProvider
+
+E move-se o ficheiro criado:
+mv app/Providers/ProfileServiceProvider.php packages/indaleto/profile/src/
+Atenção que o Service Provider deve pertencer ao namespace nome/package
+
+No ficheiro ProfileServiceProvider há uma classe com as funções boot e register onde se registam o ficheiro de rotas que será utilizado e o controlador. Por exemplo:
+public function boot()
+    {
+        include __DIR__.'/routes.php';
+    }
+    public function register()
+    {
+        $this->app->make('indaleto\configuration\configurationController');
+    }
+
+No ficheiro config/app.php, foi necessário registar o Service Provider:
+'providers' => [
+    /*
+     * Laravel Framework Service Providers...
+     */
+    Illuminate\Auth\AuthServiceProvider::class,
+    //.. Other providers
+    indaleto/configuration/ConfigurationProvider::class,
+],
+
+em packages/indaleto/configuration/src definiram-se as rotas específicas. Por exemplo:
+Route::post('/admin/users/add', 'indaleto\configuration\configurationController@addUser');
+ou
+Route::get('/testProfile',function(){
+    echo "Na página certa";
+})
+Para que as rotas tenham acesso ao middleware de autenticação devem ficar no interior de:
+Route::group(['middleware' => ['web', 'auth']], function(){
+});
+
+No fim voltar a executar o composer dump-autoload para confirmar que tudo está correto
+
+Todo o processo está bem documentado aqui:
+https://devdojo.com/tutorials/how-to-create-a-laravel-package
 
  Para incluir este package num projeto:
  composer require indaleto/configuration
