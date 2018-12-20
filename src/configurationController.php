@@ -17,6 +17,13 @@ getConfig($key,$default)
 removeConfig($key)
 setConfig($key,$value)
 
+public function getUsers() 
+public function viewUser($id) 
+public function viewUsers() 
+public function viewSettings()
+public function editProfile(Request $request)
+public function remProfileLogo()
+
 Utilização:
 Em Routes/web.php definir:
 
@@ -52,6 +59,11 @@ use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Log;
+
+use App\User;
+use Yajra\Datatables\Datatables;
+
 class configurationTable extends Model
 {
     protected $fillable = [
@@ -84,6 +96,26 @@ class usersTable extends Authenticatable
     protected $table = 'users';
 }
 
+class logsTable extends Model 
+{
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'user', 'scheme','host','path', 'url','querystring', 'ip', 'post'
+    ];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+
+    protected $table = 'logs';
+}
+
+//Class que executa algumas alterações ou fornece informações
 class Configuration{
 
     public function __construct(){
@@ -101,6 +133,20 @@ class Configuration{
             $c->key='showMenuHeader';
             $c->value='N';
             $c->save();
+        }
+        if (!Schema::hasTable('logs')){
+            Schema::create('logs', function($table)
+            {
+                $table->increments('id');
+                $table->integer('user');
+                $table->string('scheme');
+                $table->string('host');
+                $table->string('path');
+                $table->text('querystring');
+                $table->text('post');
+                $table->string('ip');
+                $table->timestamps();
+            });
         }
         if (!Schema::hasTable('users')){
             Schema::create('users', function($table)
@@ -123,17 +169,72 @@ class Configuration{
         }
         return true;
     }
+    /*****************************************************************
 
+    Implementação dos métodos genéricos
+
+    *******************************************************************/
+    public function logPage($auth){
+
+        /*Isto deve ser chamado em Auth/Middlware/Authenticate.php
+        $c=new \indaleto\configuration\Configuration;
+        $c->logPage($this->auth);*/
+        if (!Schema::hasTable('logs')){
+            Schema::create('logs', function($table)
+            {
+                $table->increments('id');
+                $table->integer('user');
+                $table->string('scheme');
+                $table->string('host');
+                $table->string('path');
+                $table->text('querystring');
+                $table->text('post');
+                $table->string('ip');
+                $table->timestamps();
+            });
+        }
+        if ($auth->check()){
+            $u=$auth->user()->id;
+        }
+        else{
+            $u=0;
+        }
+        $l=url()->full();
+        $parsedUrl = parse_url($l);
+        
+        $c=new \indaleto\configuration\logsTable;
+        $c->scheme=$parsedUrl['scheme'];
+        $c->host=$parsedUrl['host'];
+        if (isset($parsedUrl['path']))
+            $c->path=$parsedUrl['path'];
+        else
+            $c->path='';
+        if (isset($parsedUrl['query']))
+            $c->querystring=$parsedUrl['query'];
+        else
+            $c->querystring="";
+        $c->user=$u;
+        $c->ip=$_SERVER['REMOTE_ADDR'];
+        $post="";
+        foreach ($_POST as $param_name => $param_val) {
+            if ($param_name!='_token')
+                $post.= "Param: $param_name; Value: $param_val | ";
+        }
+        $c->post=$post;
+        $c->save();
+        $l="URL: ".$c->scheme."://".$c->host.$c->path." QUERYTRING: ".$c->querystring;
+        Log::info("User: $u $l");
+    }
     /*****************************************************************
 
     Implementação dos métodos relativos aos Perfil do Utilizador que fez login
 
     *******************************************************************/
-
     public function getProfile(){
         return \App\User::find(Auth::user()->id);
     }
     public function getProfileAvatar(){
+        if (!Auth::check())return '';
         if (file_exists(public_path().'/img/avatar/'.Auth::user()->id.'.jpg')){
             return '/img/avatar/'.Auth::user()->id.'.jpg';
         }
@@ -151,13 +252,11 @@ class Configuration{
         }
         $u->save();
     }
-
     /*****************************************************************
 
     Implementação dos métodos relativos aos utilizadores
 
     *******************************************************************/
-
     public function getUser($id){
         return usersTable::find($id);
     }
@@ -198,13 +297,11 @@ class Configuration{
         });        
         return true;
     }
-
     /*****************************************************************
 
     Implementação dos métodos relativos às configurações
 
     *******************************************************************/
-
     private function GetConfiguration($key){
         return configurationTable::where('configuration','settings')->where('key',$key)->first();
     }
@@ -237,6 +334,7 @@ class Configuration{
         $config->save();
     }
 }
+
 class configurationController extends Controller
 {
 	public $configuration;
@@ -244,6 +342,27 @@ class configurationController extends Controller
 		$this->configuration = new  Configuration;
 	}
 
+    //PARA DATATABLES
+    public function getUsers() {
+        return Datatables::of(User::all())->make(true);
+    }
+
+    //Para as view dos utilizadores e configuração
+    public function viewUser($id) {
+        $dados = new \indaleto\configuration\Configuration;
+        return view('adminConfiguration::admin/user', ['user' => $dados->getUser($id)]);
+        return view('adminConfiguration::admin/user', ['user' => $dados->getUser($id)]);
+    }
+    public function viewUsers() {
+        return view('adminConfiguration::admin/users');
+    }
+
+    public function viewSettings(){
+        $dados=new \indaleto\configuration\Configuration;
+        return view('adminConfiguration::admin/settings',[ 'empresa' => $dados->getConfig('empresa',''), 'imagem' => $dados->getConfig('imagem',"/img/brand/logo.svg")]);
+    }
+
+    //Para o perfil
     public function editProfile(Request $request){
         $this->configuration->editProfile([
             'name' =>$request->input('name'),

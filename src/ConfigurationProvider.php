@@ -23,6 +23,7 @@ class ConfigurationProvider extends ServiceProvider
     public function register()
     {
         $this->app->make('indaleto\configuration\configurationController');
+        $this->loadViewsFrom(__DIR__.'/views', 'adminConfiguration');
     }
 
 }
