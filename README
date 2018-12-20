@@ -29,7 +29,6 @@ class configurationController extends Controller
     }
 }
 
-
 A seguir cria-se o service provider que vai gerir as rotas e os controllers se existirem:
 php artisan make:provider CalculatorServiceProvider
 
@@ -77,6 +76,9 @@ https://devdojo.com/tutorials/how-to-create-a-laravel-package
  seguido de
  composer update
 
+Para que a view dos utilizadores e definições trabalhe é necessário que exista definido em resources/views o layout em layout/app.blade.php.
+Existe na pasta indaleto/configuration/src/views/ um exemplo deste layout.
+
 IMPLEMENTAÇÃO: MÉTODOS DISPONÍVEIS:
 
 Utilizadores
@@ -92,10 +94,6 @@ removeConfig($key)
 setConfig($key,$value)
 
 Utilização:
-Em Routes/web.php definir:
-
-Route::get('/admin/users/{id}', 'XPTOController@viewUser'); -->Obtém e Apresenta user
-Route::get('/admin/settings','settingsController@viewSettings'); -->Obtém e Apresenta Configurações
 
 As operações para adicionar, alterar e remover um utilizador devem ter como links:
 
