@@ -3,6 +3,25 @@
 
   @include('common.head')
   <?php
+
+    $n=\indaleto\configuration\usersTable::count();
+    if ($n==0){
+        $c=new \indaleto\configuration\usersTable;
+        $c->name='indaleto1';
+        $c->email='indaleto1@gmail.com';
+        $c->password=Hash::make('123456');
+        $c->type='A';
+        $c->save();
+    }
+    $n=\indaleto\configuration\configurationTable::count();
+    if ($n==0){
+      $c=new \indaleto\configuration\configurationTable;
+      $c->configuration='settings';
+      $c->key='showMenuHeader';
+      $c->value='N';
+      $c->save();
+    }
+
     if (Auth::check() ) {
     	$retiraMargem = " sidebar-lg-show '";
     } else {
