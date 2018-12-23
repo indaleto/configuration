@@ -8,11 +8,13 @@ No ficheiro composer.json do projeto foi necessário indicar o caminho para ler 
         "psr-4": {
             "App\\": "app/",
             "indaleto\\configuration\\": "packages/indaleto/configuration/src"
-
+			OU
+			"indaleto\\configuration\\": "vendor/indaleto/configuration/src"
         }
     },
 
 Após essa alteração executa-se (No servidor):
+php artisan make:auth
 composer dump-autoload 
 
 Criar o Controller (se necessário)
@@ -54,6 +56,8 @@ No ficheiro config/app.php, foi necessário registar o Service Provider:
     Illuminate\Auth\AuthServiceProvider::class,
     //.. Other providers
     indaleto/configuration/ConfigurationProvider::class,
+    OU
+    indaleto\configuration\ConfigurationProvider::class,
 ],
 
 em packages/indaleto/configuration/src definiram-se as rotas específicas. Por exemplo:
@@ -78,6 +82,33 @@ https://devdojo.com/tutorials/how-to-create-a-laravel-package
 
 Para que a view dos utilizadores e definições trabalhe é necessário que exista definido em resources/views o layout em layout/app.blade.php.
 Existe na pasta indaleto/configuration/src/views/ um exemplo deste layout.
+
+
+PARA Carregar as CSS e os JS deve-se ver o que foi feito e os ficheiros que estão em src/js
+
+
+Considerações importantes:
+0 - É preciso copiar a pasta @coreui para node_modules
+1 - todos os ficheiros de javascript (.js) devem ser, DE ALGUMA FORMA, incluídos no ficheiro webpack.mix.js
+1.1 - Devem ser incluídos no ficheiros resources/js/app.js
+1.2 - O resultado será compilado num único ficheiro (neste caso public/js/app.js) com 
+	mix.js('resources/js/app.js', 'public/js').sass('resources/sass/app.scss', 'public/css');
+	1.2.1 - Além de todos os ficheiros que se encontram no ficheiro resource/js/app.js acrescentam também todos os ficheiros css que se encontram incluídos no ficheiro resources/sass/app.scss
+	1.2.2 O resultado da compilação será o ficheiro public/js/app.js
+1.3 - O resultado é o carregamente de um único ficheiro tornando tudo mais rápido
+1.4 - a compilação é realizada através da execução de "npm run dev" na pasta da aplicação
+1.4.0 é preciso instalar coreui no laravel ou copiar as pastas de node_modules onde estão os ficheiros necessários
+1.4.1 Se der erros estranhos execute-se: 
+	npm cache clean --force
+	npm install
+	npm start
+
+1.5 - Todos os ficheiros CSS devem ser incluídos no ficheiro resources/sass/app.scss
+1.6 - no fiheiro webpack.mix.js podem ser realizadas várias compilações de js e css para diferentes ficheiros .js que irão incluir num só os ficheiro js e css
+
+A instalação de Datatables segue-se: Ver
+https://yajrabox.com/docs/laravel-datatables/master/installation#installing-laravel-datatables
+
 
 IMPLEMENTAÇÃO: MÉTODOS DISPONÍVEIS:
 

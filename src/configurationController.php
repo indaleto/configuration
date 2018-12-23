@@ -127,12 +127,7 @@ class Configuration{
                 $table->string('key');
                 $table->string('value');
                 $table->timestamps();
-            });
-            $c=new configurationTable;
-            $c->configuration='settings';
-            $c->key='showMenuHeader';
-            $c->value='N';
-            $c->save();
+            });            
         }
         if (!Schema::hasTable('logs')){
             Schema::create('logs', function($table)
@@ -160,12 +155,6 @@ class Configuration{
                 $table->timestamps();
                 $table->enum('type',['A','O']);
             });
-            $c=new usersTable;
-            $c->name='indaleto';
-            $c->email='indaleto@gmail.com';
-            $c->password=Hash::make('123456');
-            $c->type='A';
-            $c->save();
         }
         return true;
     }
