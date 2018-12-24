@@ -127,7 +127,7 @@ class Configuration{
                 $table->string('key');
                 $table->string('value');
                 $table->timestamps();
-            });            
+            });   
         }
         if (!Schema::hasTable('logs')){
             Schema::create('logs', function($table)
