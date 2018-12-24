@@ -331,6 +331,11 @@ class configurationController extends Controller
 		$this->configuration = new  Configuration;
 	}
 
+    //PARA AUTENTICACAO:
+    public function showLoginForm(){
+        return view('adminConfiguratin::auth/login');
+    }
+
     //PARA DATATABLES
     public function getUsers() {
         return Datatables::of(User::all())->make(true);
