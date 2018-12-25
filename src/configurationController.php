@@ -357,6 +357,11 @@ class configurationController extends Controller
     }
 
     //Para o perfil
+
+    public function profile(){
+        return view ('adminConfiguration::profile');
+    }
+    
     public function editProfile(Request $request){
         $this->configuration->editProfile([
             'name' =>$request->input('name'),

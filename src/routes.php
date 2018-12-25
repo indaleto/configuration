@@ -40,6 +40,7 @@ Route::group(['middleware' => ['web', 'auth']], function(){
 	Route::post('/admin/settings/edit','indaleto\configuration\configurationController@editSettings');
 	Route::get('/admin/settings/remLogo','indaleto\configuration\configurationController@remLogo');
 
+	Route::get('profile','indaleto\configuration\configurationController@profile');
 	Route::post('profile/edit','indaleto\configuration\configurationController@editProfile');
 	Route::get('profile/remLogo','indaleto\configuration\configurationController@remProfileLogo');
 
