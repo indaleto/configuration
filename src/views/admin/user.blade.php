@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('adminConfiguration::layout.app')
 
 @section('title')
     Users
