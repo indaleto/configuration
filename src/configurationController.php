@@ -359,7 +359,9 @@ class configurationController extends Controller
     //Para o perfil
 
     public function profile(){
-        return view ('adminConfiguration::profile');
+        $c=new \indaleto\configuration\Configuration;
+        $a=$c->getProfileAvatar();
+        return view('adminConfiguration::profile',['name' => $c->getProfile()->name, 'email' => $c->getProfile()->email, 'avatar' => $a]);
     }
     
     public function editProfile(Request $request){
