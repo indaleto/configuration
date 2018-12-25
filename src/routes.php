@@ -22,8 +22,8 @@ Route::group(['middleware' => ['web']], function(){
 
 
 	Route::post('register', 'App\Http\Controllers\Auth\RegisterController@register');
-	Route::post('password/email', 'App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');;
-	Route::post('password/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset');
+	Route::post('password/email', 'App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+	Route::post('password/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset')->name('password.reset');
 
 
 });
