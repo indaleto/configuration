@@ -1,5 +1,33 @@
 <?php 
 
+Route::group(['middleware' => ['web']], function(){
+	Route::get('login', function(){
+		return view('adminConfiguration::auth/login');
+	})->name('login');
+	Route::get('register', function(){
+		return view('adminConfiguration::auth.register');
+	})->name('register');
+	Route::get('password/reset', function(){
+		return view('adminConfiguration::auth.passwords.email');
+	});
+	Route::get('password/reset/{token}', function(){
+		return view('adminConfiguration::auth.passwords.reset')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
+	});
+
+	Route::post('login', 'App\Http\Controllers\Auth\LoginController@login');
+	Route::post('logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
+	Route::get('logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
+
+	Route::get('register', 'App\Http\Controllers\Auth\RegisterController@showRegistrationForm')->name('register');
+	Route::post('register', 'App\Http\Controllers\Auth\RegisterController@register');
+	Route::post('password/email', 'App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail');
+	Route::post('password/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset');
+
+
+});
+
 
 Route::group(['middleware' => ['web', 'auth']], function(){
 		

@@ -333,7 +333,7 @@ class configurationController extends Controller
 
     //PARA AUTENTICACAO:
     public function showLoginForm(){
-        return view('adminConfiguratin::auth/login');
+        return view('adminConfiguration::auth/login');
     }
 
     //PARA DATATABLES
