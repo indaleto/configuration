@@ -5,7 +5,7 @@ Route::group(['middleware' => ['web']], function(){
 		return view('adminConfiguration::auth/login');
 	})->name('login');
 	Route::get('register', function(){
-		return view('adminConfiguration::auth.register');
+		return view('adminConfiguration::auth/register');
 	})->name('register');
 	Route::get('password/reset', function(){
 		return view('adminConfiguration::auth.passwords.email');
@@ -20,9 +20,9 @@ Route::group(['middleware' => ['web']], function(){
 	Route::post('logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
 	Route::get('logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
 
-	Route::get('register', 'App\Http\Controllers\Auth\RegisterController@showRegistrationForm')->name('register');
+
 	Route::post('register', 'App\Http\Controllers\Auth\RegisterController@register');
-	Route::post('password/email', 'App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail');
+	Route::post('password/email', 'App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');;
 	Route::post('password/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset');
 
 
