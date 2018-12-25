@@ -2,13 +2,8 @@
 
 @section('title')
     <?php 
-    	if (\App\configuration::where('configuration','settings')->where('key','empresa')->count()>0){
-        	$conf= \App\configuration::where('configuration','settings')->where('key','empresa')->value('value');
-        }
-        else{
-        	$conf='N/A';
-        }
-        echo $conf;
+    	$c=new indaleto\configuration\Configuration;
+        echo $c->getConfig('empresa','');
      ?>
 @endsection
 
