@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  @include('common.head')
+  @include('adminConfiguration::common.head')
   <?php
 
     $n=\indaleto\configuration\usersTable::count();
@@ -30,17 +30,17 @@
 ?>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed <?php echo $retiraMargem; ?>">
 
-    @include('common.header')
+    @include('adminConfiguration::common.header')
 
     <?php if (Auth::check()) {?>
     <div class="app-body">
 
-    @include('common.sidebar')
+    @include('adminConfiguration::common.sidebar')
 
       <main class="main">
     <?php }?>
         <!-- Breadcrumb-->
-        @include('common.breadcrumb')
+        @include('adminConfiguration::common.breadcrumb')
 
         <div class="container-fluid">
           @yield('content')
@@ -55,7 +55,7 @@
 
     </div>
     <?php }?>
-    @include('common.footer')
+    @include('adminConfiguration::common.footer')
 
      <!-- Scripts Geral que Inclui os vários Scripts necessários-->
     <script src="{{ asset('js/app.js') }}"></script>
@@ -91,6 +91,6 @@
   </body>
 
   @yield('afterBodyScripts')
-  @include('common.conf-datatables')
+  @include('adminConfiguration::common.conf-datatables')
   
 </html>
