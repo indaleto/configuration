@@ -259,8 +259,12 @@ class Configuration{
     }
 
     public function remUser($id){
-        usersTable::where('id',$id)->delete();
+    	if (Auth::user()->id!=$id){
+        	usersTable::where('id',$id)->delete();
         return true;
+    	}
+    	else
+    		return false;
     }
 
     public function editUser($id,$campos){
