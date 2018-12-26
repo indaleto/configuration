@@ -2,6 +2,7 @@
 	$paginasSemHeader=['/info','/error'];
 	$paginaComMenuNovo=['admin/users'];
 	$paginaComMenuGuardar=['admin/settings','profile','admin/users/%'];
+	$substituir=["users" => "utilizadores", "settings" => "definições"];
  ?>
         <ol class="breadcrumb">
           <?php
@@ -38,7 +39,10 @@ foreach ($caminhos as $caminho => $value) {
 	$caminhoRel .= $value . '/';
 	$view .= $value . '.';
 	$viewAux = substr($view, 0, strlen($view) - 1);
-	if (view()->exists($viewAux)) {
+	if (isset($substituir[$value])){
+		$value=$substituir[$value];
+	}
+	if (view()->exists($viewAux) || view()->exists('adminConfiguration::'.$viewAux)) {
 		echo '<li class="breadcrumb-item">
               	<button class="btn btn-primary" type="button">
                       &nbsp;<a href="'.$caminhoRel.'" style="color:white;">' . ucfirst($value) . ' </a></button>

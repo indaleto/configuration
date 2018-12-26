@@ -101,6 +101,8 @@ $s="<?xml version='1.0' encoding='UTF-8'?>
 		</Pages>
 	</Extras>
 </menu>";
+if (file_exists('./menu.xml'))
+	$s = file_get_contents('./menu.xml', true);
 ?>
 <div class="sidebar">
         <nav class="sidebar-nav">
