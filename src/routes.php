@@ -14,7 +14,7 @@ Route::group(['middleware' => ['web']], function(){
 		return view('adminConfiguration::auth.passwords.reset')->with(
             ['token' => $token, 'email' => $request->email]
         );
-	});
+	})->name('password.reset');
 
 	Route::post('login', 'App\Http\Controllers\Auth\LoginController@login');
 	Route::post('logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
@@ -40,7 +40,7 @@ Route::group(['middleware' => ['web', 'auth']], function(){
 	Route::post('/admin/settings/edit','indaleto\configuration\configurationController@editSettings');
 	Route::get('/admin/settings/remLogo','indaleto\configuration\configurationController@remLogo');
 
-	Route::get('profile','indaleto\configuration\configurationController@profile');
+	Route::get('perfil','indaleto\configuration\configurationController@profile');
 	Route::post('profile/edit','indaleto\configuration\configurationController@editProfile');
 	Route::get('profile/remLogo','indaleto\configuration\configurationController@remProfileLogo');
 
