@@ -431,7 +431,7 @@ class configurationController extends Controller
 		if ($this->configuration->remUser($id))
 			return redirect('/admin/users?msgInfo=O utilizador foi eliminado.');
 		else
-			return redirect('/admin/users?msgInfo=O utilizador não foi eliminado.')
+			return redirect('/admin/users?msgInfo=O utilizador não foi eliminado.');
 
 	}
 
