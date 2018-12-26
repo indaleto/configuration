@@ -30,8 +30,16 @@
 					<div class="form-group">
 						<label for="type">Type</label>
 						<select name="type" id="type" class="form-control">
-							<option value="A" <?php if ($user->type=='A') echo "selected"; ?>>Administrator</option>
-							<option value="O" <?php if ($user->type=='O') echo "selected"; ?>>Other</option>
+							<?php 
+								$usersT = \indaleto\configuration\usersTypeTable::all();
+								foreach ($usersT as $userT) {
+									if ($user->type==$userT->value) 
+										$s="selected";
+									else
+											$s="";
+								    echo "<option value='".$userT->value."' $s >".$userT->usertype."</option>";
+								}
+							 ?>
 						</select>
 					</div>
 				</div>

@@ -21,6 +21,17 @@
       $c->value='N';
       $c->save();
     }
+    $n=\indaleto\configuration\usersTypeTable::count();
+    if ($n==0){
+        $c=new \indaleto\configuration\usersTypeTable;
+        $c->usertype='Administrador';
+        $c->value='A';
+        $c->save();
+        $c=new \indaleto\configuration\usersTypeTable;
+        $c->usertype='Outro';
+        $c->value='O';
+        $c->save();
+    }
 
     if (Auth::check() ) {
     	$retiraMargem = " sidebar-lg-show '";

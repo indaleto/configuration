@@ -73,6 +73,15 @@ class configurationTable extends Model
      protected $table = 'configuration';
 }
 
+class usersTypeTable extends Model
+{
+    protected $fillable = [
+        'usertype', 'value'
+    ];
+
+     protected $table = 'userstype';
+}
+
 class usersTable extends Authenticatable 
 {
     use Notifiable;
@@ -127,6 +136,14 @@ class Configuration{
                 $table->string('key');
                 $table->string('value');
                 $table->timestamps();
+            });   
+        }
+        if (!Schema::hasTable('userstype')){
+            Schema::create('userstype', function($table)
+            {
+                $table->increments('id');
+                $table->string('usertype');
+                $table->char('value');
             });   
         }
         if (!Schema::hasTable('logs')){
@@ -431,7 +448,7 @@ class configurationController extends Controller
 		if ($this->configuration->remUser($id))
 			return redirect('/admin/users?msgInfo=O utilizador foi eliminado.');
 		else
-			return redirect('/admin/users?msgInfo=O utilizador não foi eliminado.');
+			return redirect('/admin/users?msgInfo=O utilizador não pode ser eliminado.');
 
 	}
 
