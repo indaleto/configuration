@@ -428,8 +428,11 @@ class configurationController extends Controller
     }
 
     public function delUser($id) {
-		$this->configuration->remUser($id);
-		return redirect('/admin/users?msgInfo=O utilizador foi eliminado.');
+		if ($this->configuration->remUser($id))
+			return redirect('/admin/users?msgInfo=O utilizador foi eliminado.');
+		else
+			return redirect('/admin/users?msgInfo=O utilizador não foi eliminado.')
+
 	}
 
 	public function editUser(Request $request, $id) {
