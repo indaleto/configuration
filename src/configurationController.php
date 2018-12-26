@@ -144,6 +144,7 @@ class Configuration{
                 $table->increments('id');
                 $table->string('usertype');
                 $table->char('value');
+                $table->timestamps();
             });   
         }
         if (!Schema::hasTable('logs')){
