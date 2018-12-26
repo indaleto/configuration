@@ -10,7 +10,7 @@ Route::group(['middleware' => ['web']], function(){
 	Route::get('password/reset', function(){
 		return view('adminConfiguration::auth.passwords.email');
 	});
-	Route::get('password/reset/{token}', function(){
+	Route::get('password/reset/{token}', function(Illuminate\Http\Request $request,$token){
 		return view('adminConfiguration::auth.passwords.reset')->with(
             ['token' => $token, 'email' => $request->email]
         );
@@ -23,7 +23,7 @@ Route::group(['middleware' => ['web']], function(){
 
 	Route::post('register', 'App\Http\Controllers\Auth\RegisterController@register');
 	Route::post('password/email', 'App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-	Route::post('password/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset')->name('password.reset');
+	Route::post('password/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset')->name('password.update');
 
 
 });
