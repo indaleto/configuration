@@ -78,9 +78,10 @@
         table=$('#users-table').DataTable({
             ajax: '{!! route('get.users') !!}',
             columns: [
-                { data: 'name', name: 'name',"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) { $(nTd).html("<a href='/admin/users/"+oData.id+"'>"+oData.name+"</a>");} },
-                { data: 'email', name: 'email' }
-            ]
+                { data: 'name', name: 'name',orderable: false,"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) { $(nTd).html("<a href='/admin/users/"+oData.id+"'>"+oData.name+"</a>");} },
+                { data: 'email', name: 'email',orderable: false }
+            ],
+            "order": [],
         });
 
         var name="<?php echo $user->name;?>";

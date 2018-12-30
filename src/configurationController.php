@@ -368,7 +368,7 @@ class configurationController extends Controller
 
     //PARA DATATABLES
     public function getUsers() {
-        return Datatables::of(User::all())->make(true);
+        return Datatables::of(User::select(['id','name','email'])->orderBy('name'))->make(true);
     }
 
     //Para as view dos utilizadores e configuração
