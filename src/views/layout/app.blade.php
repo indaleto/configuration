@@ -82,7 +82,10 @@
       }
 
       function addButtonBreadcrumb(name, text, icon){
-        $("ol.breadcrumb").append('<li class="breadcrumb-item"><button id="'+name+'" class="btn btn-success" type="button"><i class="'+icon+' icons"></i>&nbsp;'+text+'</button></li>');
+        if (text!='Eliminar')
+          $("ol.breadcrumb").append('<li class="breadcrumb-item"><button id="'+name+'" class="btn btn-success" type="button"><i class="'+icon+' icons"></i>&nbsp;'+text+'</button></li>');
+        else
+          $("ol.breadcrumb").append('<li class="breadcrumb-item"><button id="'+name+'" class="btn btn-danger" type="button"><i class="'+icon+' icons"></i>&nbsp;'+text+'</button></li>');
       }
 
     function codeAddress() {

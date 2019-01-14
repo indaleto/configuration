@@ -77,7 +77,7 @@ $avatar = $c->getProfileAvatar();
     </button>
 
     <a class="navbar-brand" href="/">
-        <img alt="Logo" class="navbar-brand-full" height="25" src={{ $imagem }} width="89">
+        <img alt="Logo" class="navbar-brand-full" height="35" src={{ $imagem }} width="89">
             <img alt="Logo" class="navbar-brand-minimized" height="30" src="{{ $imagem }}" width="30">
             </img>
         </img>
